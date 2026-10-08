@@ -1,0 +1,11 @@
+<svg width="32" height="38" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Smartphone outline -->
+  <rect x="1.5" y="1.5" width="20" height="31" rx="4" stroke="black" stroke-width="2.5" fill="none"/>
+  <!-- Phone top speaker -->
+  <line x1="8" y1="4.5" x2="15" y2="4.5" stroke="black" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Chat bubble badge at bottom right -->
+  <path d="M22 20C26.4183 20 30 23.5817 30 28C30 32.4183 26.4183 36 22 36C20.65 36 19.38 35.66 18.28 35.06L14 36L15.35 32.22C14.51 31.02 14 29.57 14 28C14 23.5817 17.5817 20 22 20Z" fill="black"/>
+  <!-- Chat lines inside bubble -->
+  <line x1="18.5" y1="26.5" x2="25.5" y2="26.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="18.5" y1="29.5" x2="23" y2="29.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+</svg>
