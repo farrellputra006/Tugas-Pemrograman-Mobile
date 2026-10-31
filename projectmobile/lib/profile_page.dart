@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,6 +16,30 @@ class _ProfilePageState extends State<ProfilePage> {
   static const Color textDark = Color(0xFF1F2937);
 
   int _selectedNavIndex = 3; // Default pada tab 'AKUN'
+  String _userName = 'ASEP KOPLING';
+  String? _profileImagePath;
+
+  Future<void> _navigateToEditProfile() async {
+    final result = await Navigator.pushNamed(
+      context,
+      '/edit-profile',
+      arguments: {
+        'name': _userName,
+        'imagePath': _profileImagePath,
+      },
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        if (result['name'] != null && (result['name'] as String).isNotEmpty) {
+          _userName = result['name'] as String;
+        }
+        if (result.containsKey('imagePath')) {
+          _profileImagePath = result['imagePath'] as String?;
+        }
+      });
+    }
+  }
 
   void _showComingSoonSnackBar(String title) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -30,48 +56,109 @@ class _ProfilePageState extends State<ProfilePage> {
   void _showLogoutDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
         ),
-        title: const Text(
-          'Konfirmasi Keluar',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        content: const Text(
-          'Apakah Anda yakin ingin keluar dari akun ini?',
-          style: TextStyle(fontSize: 14),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'Batal',
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                '/login',
-                (route) => false,
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: primaryGreen,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+        backgroundColor: Colors.white,
+        elevation: 8,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 48),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(22, 22, 22, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Judul Dialog: "Keluar?"
+              const Text(
+                'Keluar?',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
-            ),
-            child: const Text('Keluar'),
+
+              const SizedBox(height: 8),
+
+              // Pesan Konfirmasi: "Apakah Kamu Yakin Ingin Keluar?"
+              const Text(
+                'Apakah Kamu Yakin Ingin Keluar?',
+                style: TextStyle(
+                  fontSize: 13.5,
+                  color: Colors.black87,
+                ),
+              ),
+
+              const SizedBox(height: 22),
+
+              // Baris Tombol "Batal" dan "Keluar"
+              Row(
+                children: [
+                  // Tombol "Batal" (Hijau gelap tema, tulisan putih)
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryGreen,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      child: const Text(
+                        'Batal',
+                        style: TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 14),
+
+                  // Tombol "Keluar" (Latar putih, border hijau gelap, tulisan hitam)
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/login',
+                          (route) => false,
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black87,
+                        side: const BorderSide(
+                          color: primaryGreen,
+                          width: 1.5,
+                        ),
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      child: const Text(
+                        'Keluar',
+                        style: TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -97,10 +184,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     const SizedBox(height: 14),
 
-                    // Nama Profil: "ASEP KOPLING"
-                    const Text(
-                      'ASEP KOPLING',
-                      style: TextStyle(
+                    // Nama Profil
+                    Text(
+                      _userName,
+                      style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w900,
                         color: textDark,
@@ -137,32 +224,32 @@ class _ProfilePageState extends State<ProfilePage> {
                     _buildMenuItem(
                       icon: Icons.settings_outlined,
                       title: 'Pengaturan',
-                      onTap: () => _showComingSoonSnackBar('Pengaturan'),
+                      onTap: () => Navigator.pushNamed(context, '/settings'),
                     ),
                     _buildDivider(),
                     _buildMenuItem(
                       icon: Icons.edit_outlined,
                       title: 'Edit Profil',
-                      onTap: () => _showComingSoonSnackBar('Edit Profil'),
+                      onTap: _navigateToEditProfile,
                     ),
                     _buildDivider(),
                     _buildMenuItem(
                       icon: Icons.lock_outline,
                       title: 'Kebijakan Privasi',
-                      onTap: () => _showComingSoonSnackBar('Kebijakan Privasi'),
+                      onTap: () => Navigator.pushNamed(context, '/privacy-policy'),
                     ),
                     _buildDivider(),
                     _buildMenuItem(
                       icon: Icons.info_outline,
                       title: 'Tentang Kami',
-                      onTap: () => _showComingSoonSnackBar('Tentang Kami'),
+                      onTap: () => Navigator.pushNamed(context, '/about-us'),
                     ),
                     _buildDivider(),
                     // Ketentuan Layanan (sesuai gambar referensi: tidak memakai ikon depan)
                     _buildMenuItem(
                       icon: null,
                       title: 'Ketentuan Layanan',
-                      onTap: () => _showComingSoonSnackBar('Ketentuan Layanan'),
+                      onTap: () => Navigator.pushNamed(context, '/terms-of-service'),
                     ),
                     _buildDivider(),
                     _buildMenuItem(
@@ -185,6 +272,84 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Widget _buildAvatarImage() {
+    if (_profileImagePath != null && _profileImagePath!.isNotEmpty) {
+      if (_profileImagePath!.startsWith('assets/') || _profileImagePath!.startsWith('lib/')) {
+        return Image.asset(
+          _profileImagePath!,
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+          errorBuilder: (context, error, stackTrace) => _buildFallbackAvatarImage(),
+        );
+      } else if (kIsWeb) {
+        return Image.network(
+          _profileImagePath!,
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+          errorBuilder: (context, error, stackTrace) => _buildFallbackAvatarImage(),
+        );
+      } else {
+        final file = File(_profileImagePath!);
+        return Image.file(
+          file,
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+          errorBuilder: (context, error, stackTrace) => _buildFallbackAvatarImage(),
+        );
+      }
+    }
+    return _buildFallbackAvatarImage();
+  }
+
+  Widget _buildHeaderBackgroundImage() {
+    if (_profileImagePath == null || _profileImagePath!.isEmpty) {
+      return const SizedBox();
+    }
+    if (_profileImagePath!.startsWith('assets/') || _profileImagePath!.startsWith('lib/')) {
+      return Image.asset(
+        _profileImagePath!,
+        fit: BoxFit.cover,
+        alignment: Alignment.center,
+        errorBuilder: (_, __, ___) => const SizedBox(),
+      );
+    } else if (kIsWeb) {
+      return Image.network(
+        _profileImagePath!,
+        fit: BoxFit.cover,
+        alignment: Alignment.center,
+        errorBuilder: (_, __, ___) => const SizedBox(),
+      );
+    } else {
+      final file = File(_profileImagePath!);
+      if (file.existsSync()) {
+        return Image.file(
+          file,
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+          errorBuilder: (_, __, ___) => const SizedBox(),
+        );
+      }
+    }
+    return const SizedBox();
+  }
+
+  Widget _buildFallbackAvatarImage() {
+    return Image.asset(
+      'lib/images/asep_kopling.jpg',
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          color: Colors.grey.shade200,
+          child: const Icon(
+            Icons.person,
+            size: 64,
+            color: primaryGreen,
+          ),
+        );
+      },
+    );
+  }
+
   // Header Hijau dengan Avatar Foto Profil Lingkaran
   Widget _buildHeaderWithAvatar() {
     const double headerHeight = 150.0;
@@ -194,48 +359,51 @@ class _ProfilePageState extends State<ProfilePage> {
       clipBehavior: Clip.none,
       alignment: Alignment.topCenter,
       children: [
-        // Latar Belakang Hijau Atas
+        // Latar Belakang Atas (menyesuaikan hasil foto kamera bila tersedia dengan aksen tema)
         Container(
           width: double.infinity,
           height: headerHeight,
-          color: primaryGreen,
+          decoration: const BoxDecoration(
+            color: primaryGreen,
+          ),
+          child: (_profileImagePath != null && _profileImagePath!.isNotEmpty)
+              ? Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    _buildHeaderBackgroundImage(),
+                    Container(
+                      color: primaryGreen.withValues(alpha: 0.68),
+                    ),
+                  ],
+                )
+              : null,
         ),
 
         // Foto Profil Lingkaran dengan border putih
         Positioned(
           top: headerHeight - avatarRadius,
-          child: Container(
-            width: avatarRadius * 2,
-            height: avatarRadius * 2,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              border: Border.all(
+          child: GestureDetector(
+            onTap: _navigateToEditProfile,
+            child: Container(
+              width: avatarRadius * 2,
+              height: avatarRadius * 2,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
                 color: Colors.white,
-                width: 4.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.12),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
+                border: Border.all(
+                  color: Colors.white,
+                  width: 4.5,
                 ),
-              ],
-            ),
-            child: ClipOval(
-              child: Image.asset(
-                'lib/images/asep_kopling.jpg',
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey.shade200,
-                    child: const Icon(
-                      Icons.person,
-                      size: 64,
-                      color: primaryGreen,
-                    ),
-                  );
-                },
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.12),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: ClipOval(
+                child: _buildAvatarImage(),
               ),
             ),
           ),
@@ -337,7 +505,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: InkWell(
                         onTap: () {
                           setState(() => _selectedNavIndex = 0);
-                          _showComingSoonSnackBar('Beranda');
+                          if (Navigator.canPop(context)) {
+                            Navigator.pop(context);
+                          } else {
+                            Navigator.pushReplacementNamed(context, '/home');
+                          }
                         },
                         child: Center(
                           child: Icon(
@@ -351,16 +523,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
 
-                    // Tab 2: Keamanan / Proteksi
+                    // Tab 2: REKOMENDASI (Rute & Transportasi)
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          setState(() => _selectedNavIndex = 1);
-                          _showComingSoonSnackBar('Keamanan');
+                          Navigator.pushNamed(context, '/rekomendasi');
                         },
                         child: Center(
                           child: Icon(
-                            Icons.verified_user_outlined,
+                            Icons.shield_outlined,
                             size: 26,
                             color: _selectedNavIndex == 1
                                 ? Colors.white
@@ -370,12 +541,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
 
-                    // Tab 3: Pesan / Notifikasi
+                    // Tab 3: Ulasan / Review
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          setState(() => _selectedNavIndex = 2);
-                          _showComingSoonSnackBar('Pesan');
+                          Navigator.pushNamed(context, '/reviews');
                         },
                         child: Center(
                           child: Icon(

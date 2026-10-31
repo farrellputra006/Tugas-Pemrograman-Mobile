@@ -14,6 +14,8 @@ class _VerificationPageState extends State<VerificationPage> {
   bool _isEmail = false;
   String? _destination;
   bool _isResetPassword = false;
+  bool _isChangePhone = false;
+  bool _isChangeEmail = false;
   bool _isInit = false;
 
   // 4 Controller dan FocusNode untuk masing-masing kotak OTP
@@ -40,6 +42,12 @@ class _VerificationPageState extends State<VerificationPage> {
         }
         if (args['isResetPassword'] != null) {
           _isResetPassword = args['isResetPassword'] as bool;
+        }
+        if (args['isChangePhone'] != null) {
+          _isChangePhone = args['isChangePhone'] as bool;
+        }
+        if (args['isChangeEmail'] != null) {
+          _isChangeEmail = args['isChangeEmail'] as bool;
         }
       }
       _isInit = true;
@@ -295,6 +303,34 @@ class _VerificationPageState extends State<VerificationPage> {
                             Navigator.pushReplacementNamed(
                               context,
                               '/new-password',
+                            );
+                          } else if (_isChangePhone) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Nomor telepon berhasil diverifikasi dan diubah'),
+                                backgroundColor: primaryGreen,
+                                behavior: SnackBarBehavior.floating,
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/home',
+                              (route) => false,
+                            );
+                          } else if (_isChangeEmail) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Email berhasil diverifikasi dan diubah'),
+                                backgroundColor: primaryGreen,
+                                behavior: SnackBarBehavior.floating,
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/home',
+                              (route) => false,
                             );
                           } else {
                             // Arahkan ke Beranda setelah verifikasi registrasi berhasil
