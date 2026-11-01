@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +38,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   // Theme colors matching Ecowalk brand and reference mockups
   static const Color primaryGreen = Color(0xFF265D52);
   static const Color darkGreen = Color(0xFF1E604E);
@@ -77,9 +79,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         rating: 5.0,
         imagePath: 'lib/images/dufan.png',
         category: 'Alam',
-        description:
-            'Taman hiburan outdoor terbesar dengan beragam wahana atraktif dan menantang adrenalin seperti Halilintar, Tornado, Kora-kora, dan Bianglala.',
-        facilities: ['Wahana Ekstrem', 'Restoran', 'Mushola', 'Toilet Bersih', 'Loker'],
+        description: 'Taman hiburan outdoor terbesar dengan beragam wahana atraktif dan menantang adrenalin seperti Halilintar, Tornado, Kora-kora, dan Bianglala.',
+        facilities: [
+          'Wahana Ekstrem',
+          'Restoran',
+          'Mushola',
+          'Toilet Bersih',
+          'Loker',
+        ],
       ),
       DestinationItem(
         id: 'tmii',
@@ -90,9 +97,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         rating: 5.0,
         imagePath: 'lib/images/tmii.png',
         category: 'Sejarah',
-        description:
-            'Kawasan taman wisata bertema budaya Indonesia dengan anjungan daerah representatif seluruh provinsi, museum, kereta gantung, dan miniatur kepulauan nusantara.',
-        facilities: ['Anjungan Daerah', 'Kereta Gantung', 'Museum', 'Taman Burung', 'Food Court'],
+        description: 'Kawasan taman wisata bertema budaya Indonesia dengan anjungan daerah representatif seluruh provinsi, museum, kereta gantung, dan miniatur kepulauan nusantara.',
+        facilities: [
+          'Anjungan Daerah',
+          'Kereta Gantung',
+          'Museum',
+          'Taman Burung',
+          'Food Court',
+        ],
       ),
       DestinationItem(
         id: 'ragunan',
@@ -103,9 +115,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         rating: 4.8,
         imagePath: 'lib/images/dufan.png',
         category: 'Alam',
-        description:
-            'Kebun binatang legendaris dengan ribuan spesies satwa langka dan pepohonan rindang seluas 140 hektar yang sejuk untuk rekreasi keluarga.',
-        facilities: ['Pusat Primata', 'Sewa Sepeda', 'Danau', 'Taman Anak', 'Parkir Luas'],
+        description: 'Kebun binatang legendaris dengan ribuan spesies satwa langka dan pepohonan rindang seluas 140 hektar yang sejuk untuk rekreasi keluarga.',
+        facilities: [
+          'Pusat Primata',
+          'Sewa Sepeda',
+          'Danau',
+          'Taman Anak',
+          'Parkir Luas',
+        ],
       ),
       DestinationItem(
         id: 'monas',
@@ -116,16 +133,21 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         rating: 4.9,
         imagePath: 'lib/images/tmii.png',
         category: 'Sejarah',
-        description:
-            'Ikon kebanggaan Indonesia dengan museum diorama perjuangan bangsa serta puncak tugu emas dengan pemandangan lanskap kota Jakarta 360 derajat.',
-        facilities: ['Museum Sejarah', 'Lift Puncak', 'Taman Luas', 'Wisata Malam', 'Kereta Wisata'],
+        description: 'Ikon kebanggaan Indonesia dengan museum diorama perjuangan bangsa serta puncak tugu emas dengan pemandangan lanskap kota Jakarta 360 derajat.',
+        facilities: [
+          'Museum Sejarah',
+          'Lift Puncak',
+          'Taman Luas',
+          'Wisata Malam',
+          'Kereta Wisata',
+        ],
       ),
     ];
 
     _botAnimController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1600),
-    )..repeat(reverse: true);
+    )..forward();
 
     _botFloatAnimation = Tween<double>(begin: -4.0, end: 4.0).animate(
       CurvedAnimation(parent: _botAnimController, curve: Curves.easeInOut),
@@ -143,7 +165,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       return _destinations;
     }
     return _destinations
-        .where((item) => item.category.toLowerCase() == _selectedCategory.toLowerCase())
+        .where(
+          (item) =>
+              item.category.toLowerCase() == _selectedCategory.toLowerCase(),
+        )
         .toList();
   }
 
@@ -151,10 +176,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     final result = await Navigator.pushNamed(
       context,
       '/profile',
-      arguments: {
-        'name': _userName,
-        'imagePath': _profileImagePath,
-      },
+      arguments: {'name': _userName, 'imagePath': _profileImagePath},
     );
 
     if (result != null && result is Map<String, dynamic>) {
@@ -192,7 +214,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             ? 'Rp. 190.000 - Rp. 400.000'
             : item.price,
         'distance': item.distance,
-        'heroImage': item.id == 'dufan' ? 'lib/images/dufan_detail_hero.png' : item.imagePath,
+        'heroImage': item.id == 'dufan'
+            ? 'lib/images/dufan_detail_hero.png'
+            : item.imagePath,
         'mapImage': 'lib/images/map_dufan.png',
       },
     );
@@ -217,7 +241,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 children: [
                   const Text(
                     'Perbandingan Destinasi',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textDark),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: textDark,
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close, color: textMuted),
@@ -227,51 +255,123 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ),
               const SizedBox(height: 12),
               Table(
-                border: TableBorder.all(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(8)),
+                border: TableBorder.all(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 children: const [
                   TableRow(
                     decoration: BoxDecoration(color: Color(0xFFF1F5F9)),
                     children: [
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('Kriteria', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                        child: Text(
+                          'Kriteria',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('DUFAN', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                        child: Text(
+                          'DUFAN',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('TMII', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                        child: Text(
+                          'TMII',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                   TableRow(
                     children: [
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('Jarak', style: TextStyle(fontSize: 12))),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('1.68 KM', style: TextStyle(fontSize: 12))),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('3.84 KM', style: TextStyle(fontSize: 12))),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Jarak', style: TextStyle(fontSize: 12)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('1.68 KM', style: TextStyle(fontSize: 12)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('3.84 KM', style: TextStyle(fontSize: 12)),
+                      ),
                     ],
                   ),
                   TableRow(
                     children: [
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('Tiket Masuk', style: TextStyle(fontSize: 12))),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('Rp. 260.000', style: TextStyle(fontSize: 12))),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('Mulai Rp. 25.000', style: TextStyle(fontSize: 12))),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Tiket Masuk',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Rp. 260.000',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Mulai Rp. 25.000',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
                     ],
                   ),
                   TableRow(
                     children: [
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('Tema', style: TextStyle(fontSize: 12))),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('Wahana Bermain', style: TextStyle(fontSize: 12))),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('Edukasi & Budaya', style: TextStyle(fontSize: 12))),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Tema', style: TextStyle(fontSize: 12)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Wahana Bermain',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Edukasi & Budaya',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
                     ],
                   ),
                   TableRow(
                     children: [
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('Rating', style: TextStyle(fontSize: 12))),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('⭐ 5.0', style: TextStyle(fontSize: 12))),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('⭐ 5.0', style: TextStyle(fontSize: 12))),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Rating', style: TextStyle(fontSize: 12)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('⭐ 5.0', style: TextStyle(fontSize: 12)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('⭐ 5.0', style: TextStyle(fontSize: 12)),
+                      ),
                     ],
                   ),
                 ],
@@ -284,7 +384,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       style: OutlinedButton.styleFrom(
                         foregroundColor: textDark,
                         side: BorderSide(color: Colors.grey.shade300),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                       child: const Text('Tutup'),
@@ -297,7 +399,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primaryGreen,
                         foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       onPressed: () {
                         Navigator.pop(context);
@@ -349,7 +453,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     children: [
                       Text(
                         'Ecowalk AI Assistant',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: textDark),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: textDark,
+                        ),
                       ),
                       Text(
                         'Panduan pintar liburan Anda',
@@ -376,21 +484,33 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 spacing: 8,
                 children: [
                   ActionChip(
-                    label: const Text('Wisata Keluarga', style: TextStyle(fontSize: 11)),
+                    label: const Text(
+                      'Wisata Keluarga',
+                      style: TextStyle(fontSize: 11),
+                    ),
                     onPressed: () {
-                      promptController.text = 'Rekomendasi wisata keluarga terbaik di Jakarta';
+                      promptController.text =
+                          'Rekomendasi wisata keluarga terbaik di Jakarta';
                     },
                   ),
                   ActionChip(
-                    label: const Text('Tiket Murah', style: TextStyle(fontSize: 11)),
+                    label: const Text(
+                      'Tiket Murah',
+                      style: TextStyle(fontSize: 11),
+                    ),
                     onPressed: () {
-                      promptController.text = 'Tempat wisata hemat di bawah 50 ribu';
+                      promptController.text =
+                          'Tempat wisata hemat di bawah 50 ribu';
                     },
                   ),
                   ActionChip(
-                    label: const Text('Wahana Ramah Anak', style: TextStyle(fontSize: 11)),
+                    label: const Text(
+                      'Wahana Ramah Anak',
+                      style: TextStyle(fontSize: 11),
+                    ),
                     onPressed: () {
-                      promptController.text = 'Spot bermain edukatif ramah anak';
+                      promptController.text =
+                          'Spot bermain edukatif ramah anak';
                     },
                   ),
                 ],
@@ -404,8 +524,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       decoration: InputDecoration(
                         hintText: 'Tulis pertanyaanmu...',
                         hintStyle: const TextStyle(fontSize: 13),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(24)),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
                         filled: true,
                         fillColor: const Color(0xFFF8FAFC),
                       ),
@@ -415,7 +540,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   CircleAvatar(
                     backgroundColor: primaryGreen,
                     child: IconButton(
-                      icon: const Icon(Icons.send_rounded, color: Colors.white, size: 18),
+                      icon: const Icon(
+                        Icons.send_rounded,
+                        color: Colors.white,
+                        size: 18,
+                      ),
                       onPressed: () {
                         final text = promptController.text.trim();
                         if (text.isNotEmpty) {
@@ -473,27 +602,43 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     const SizedBox(height: 20),
 
                     // 3. REKOMENDASI SECTION
-                    _buildSectionHeaderWithAction('Rekomendasi', 'Cari Rute', () {
-                      Navigator.pushNamed(context, '/rekomendasi');
-                    }),
+                    _buildSectionHeaderWithAction(
+                      'Rekomendasi',
+                      'Cari Rute',
+                      () {
+                        Navigator.pushNamed(context, '/rekomendasi');
+                      },
+                    ),
                     const SizedBox(height: 12),
                     _buildRecommendationList(),
 
                     const SizedBox(height: 22),
 
                     // 4. KATEGORI SECTION
-                    _buildSectionHeaderWithAction('Kategori', 'Lihat Semua', () {
-                      Navigator.pushNamed(context, '/kategori', arguments: _selectedCategory);
-                    }),
+                    _buildSectionHeaderWithAction(
+                      'Kategori',
+                      'Lihat Semua',
+                      () {
+                        Navigator.pushNamed(
+                          context,
+                          '/kategori',
+                          arguments: _selectedCategory,
+                        );
+                      },
+                    ),
                     const SizedBox(height: 12),
                     _buildCategoryChips(),
 
                     const SizedBox(height: 22),
 
                     // 5. PILIHAN TERATAS SECTION
-                    _buildSectionHeaderWithAction('Pilihan Teratas', 'Jelajahi', () {
-                      Navigator.pushNamed(context, '/kategori');
-                    }),
+                    _buildSectionHeaderWithAction(
+                      'Pilihan Teratas',
+                      'Jelajahi',
+                      () {
+                        Navigator.pushNamed(context, '/kategori');
+                      },
+                    ),
                     const SizedBox(height: 12),
                     _buildPilihanTeratasList(),
 
@@ -505,18 +650,26 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     const SizedBox(height: 22),
 
                     // 7. KUNJUNGI LAGI SECTION
-                    _buildSectionHeaderWithAction('Kunjungi Lagi', 'Selengkapnya', () {
-                      _showDestinationDetail(_destinations[1]);
-                    }),
+                    _buildSectionHeaderWithAction(
+                      'Kunjungi Lagi',
+                      'Selengkapnya',
+                      () {
+                        _showDestinationDetail(_destinations[1]);
+                      },
+                    ),
                     const SizedBox(height: 12),
                     _buildKunjungiLagiList(),
 
                     const SizedBox(height: 22),
 
                     // 8. TERAKHIR DILIHAT SECTION
-                    _buildSectionHeaderWithAction('Terakhir Dilihat', 'Selengkapnya', () {
-                      Navigator.pushNamed(context, '/terakhir-dilihat');
-                    }),
+                    _buildSectionHeaderWithAction(
+                      'Terakhir Dilihat',
+                      'Selengkapnya',
+                      () {
+                        Navigator.pushNamed(context, '/terakhir-dilihat');
+                      },
+                    ),
                     const SizedBox(height: 12),
                     _buildTerakhirDilihatCard(),
                   ],
@@ -552,7 +705,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.blueAccent.withValues(alpha: 0.25),
+                                  color: Colors.blueAccent.withValues(
+                                    alpha: 0.25,
+                                  ),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
@@ -612,10 +767,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 width: 20,
                 height: 22,
                 fit: BoxFit.contain,
-                colorFilter: const ColorFilter.mode(
-                  darkGreen,
-                  BlendMode.srcIn,
-                ),
+                colorFilter: const ColorFilter.mode(darkGreen, BlendMode.srcIn),
               ),
             ),
             const Text(
@@ -642,21 +794,26 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 height: 38,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: primaryGreen.withValues(alpha: 0.2), width: 1.5),
+                  border: Border.all(
+                    color: primaryGreen.withValues(alpha: 0.2),
+                    width: 1.5,
+                  ),
                 ),
                 child: ClipOval(
                   child: _profileImagePath != null
                       ? (kIsWeb
-                          ? Image.network(
-                              _profileImagePath!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) => _buildFallbackAvatar(),
-                            )
-                          : Image.file(
-                              File(_profileImagePath!),
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) => _buildFallbackAvatar(),
-                            ))
+                            ? Image.network(
+                                _profileImagePath!,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, _, _) =>
+                                    _buildFallbackAvatar(),
+                              )
+                            : Image.file(
+                                File(_profileImagePath!),
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, _, _) =>
+                                    _buildFallbackAvatar(),
+                              ))
                       : _buildFallbackAvatar(),
                 ),
               ),
@@ -743,10 +900,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         gradient: const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF386C5E),
-            Color(0xFFC7A87A),
-          ],
+          colors: [Color(0xFF386C5E), Color(0xFFC7A87A)],
         ),
       ),
       child: Row(
@@ -797,8 +951,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             width: 105,
             height: 105,
             fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.wb_sunny_rounded, size: 80, color: Colors.amber),
+            errorBuilder: (context, error, stackTrace) => const Icon(
+              Icons.wb_sunny_rounded,
+              size: 80,
+              color: Colors.amber,
+            ),
           ),
         ],
       ),
@@ -818,7 +975,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  Widget _buildSectionHeaderWithAction(String title, String actionText, VoidCallback onAction) {
+  Widget _buildSectionHeaderWithAction(
+    String title,
+    String actionText,
+    VoidCallback onAction,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -879,7 +1040,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  Widget _buildDestinationCard(DestinationItem item, {double width = 175, double height = 250}) {
+  Widget _buildDestinationCard(
+    DestinationItem item, {
+    double width = 175,
+    double height = 250,
+  }) {
     return GestureDetector(
       onTap: () => _showDestinationDetail(item),
       child: Container(
@@ -901,10 +1066,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             fit: StackFit.expand,
             children: [
               // Background Image
-              Image.asset(
-                item.imagePath,
-                fit: BoxFit.cover,
-              ),
+              Image.asset(item.imagePath, fit: BoxFit.cover),
 
               // Gradient dark overlay on bottom for readability
               Positioned.fill(
@@ -930,7 +1092,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 top: 10,
                 right: 10,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 7,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF1B4D43).withValues(alpha: 0.75),
                     borderRadius: BorderRadius.circular(12),
@@ -971,7 +1136,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     // Location Pin
                     Row(
                       children: [
-                        const Icon(Icons.location_on, color: Colors.redAccent, size: 11),
+                        const Icon(
+                          Icons.location_on,
+                          color: Colors.redAccent,
+                          size: 11,
+                        ),
                         const SizedBox(width: 2),
                         Expanded(
                           child: Text(
@@ -1003,22 +1172,29 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: List.generate(
-                            5,
-                            (starIndex) => const Icon(
-                              Icons.star,
-                              color: Color(0xFFFFB800),
-                              size: 11,
+                        Expanded(
+                          child: Row(
+                            children: List.generate(
+                              5,
+                              (starIndex) => const Icon(
+                                Icons.star,
+                                color: Color(0xFFFFB800),
+                                size: 11,
+                              ),
                             ),
                           ),
                         ),
-                        const Text(
-                          'Lebih Lanjut >',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 8.5,
-                            fontWeight: FontWeight.w600,
+                        Flexible(
+                          child: Text(
+                            'Lebih Lanjut >',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.right,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 8.5,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ],
@@ -1055,10 +1231,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF2E6B5E) : Colors.transparent,
+                color: isSelected
+                    ? const Color(0xFF2E6B5E)
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: isSelected ? const Color(0xFF2E6B5E) : Colors.transparent,
+                  color: isSelected
+                      ? const Color(0xFF2E6B5E)
+                      : Colors.transparent,
                 ),
               ),
               child: Center(
@@ -1145,7 +1325,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           const SizedBox(height: 2),
                           Row(
                             children: [
-                              const Icon(Icons.location_on, color: Colors.redAccent, size: 9),
+                              const Icon(
+                                Icons.location_on,
+                                color: Colors.redAccent,
+                                size: 9,
+                              ),
                               const SizedBox(width: 2),
                               Expanded(
                                 child: Text(
@@ -1238,10 +1422,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 const SizedBox(height: 4),
                 const Text(
                   'Bandingkan sekarang dan temukan yang terbaik!',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 10.5,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 10.5),
                 ),
                 const SizedBox(height: 12),
                 ElevatedButton(
@@ -1249,10 +1430,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     backgroundColor: Colors.white,
                     foregroundColor: const Color(0xFF265D52),
                     elevation: 0,
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 6,
+                    ),
                     minimumSize: Size.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
                   onPressed: () => Navigator.pushNamed(context, '/komparasi'),
                   child: const Text(
@@ -1348,7 +1534,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           const SizedBox(height: 2),
                           Row(
                             children: [
-                              const Icon(Icons.location_on, color: Colors.redAccent, size: 9),
+                              const Icon(
+                                Icons.location_on,
+                                color: Colors.redAccent,
+                                size: 9,
+                              ),
                               const SizedBox(width: 2),
                               Expanded(
                                 child: Text(

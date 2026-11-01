@@ -25,7 +25,8 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
   late TextEditingController _destinationController;
 
   bool _isRouteSearched = true;
-  String _selectedTransportFilter = 'Semua'; // 'Semua', 'Umum', 'Pribadi', 'Hemat'
+  String _selectedTransportFilter =
+      'Semua'; // 'Semua', 'Umum', 'Pribadi', 'Hemat'
 
   final List<Map<String, dynamic>> _destinationRecommendations = [
     {
@@ -36,8 +37,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
       'rating': 4.5,
       'image': 'lib/images/moja_museum.png',
       'address': 'Gelora Bung Karno, Main Stadium, Jl. Gerbang Pemuda No.1, Jakarta Pusat',
-      'description':
-          'Moja Museum adalah ruang seni interaktif kekinian dengan instalasi visual estetik, roller skating (RoJA by MoJA), dan spot foto menarik untuk anak muda dan keluarga.',
+      'description': 'Moja Museum adalah ruang seni interaktif kekinian dengan instalasi visual estetik, roller skating (RoJA by MoJA), dan spot foto menarik untuk anak muda dan keluarga.',
       'openHours': '11:00 - 19:30',
       'distance': '3.2 KM',
     },
@@ -48,10 +48,8 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
       'price': 'Mulai dari Rp. 65.000',
       'rating': 4.5,
       'image': 'lib/images/ocean_park.png',
-      'address':
-          'CBD Area, Jl. Pahlawan Seribu, Lengkong Gudang, Kec. Serpong, Tangerang Selatan 15310',
-      'description':
-          'Ocean Park Water Adventure BSD City adalah taman rekreasi air tematik dengan wahana kolam ombak, seluncuran air menantang, kolam arus, dan area bermain anak.',
+      'address': 'CBD Area, Jl. Pahlawan Seribu, Lengkong Gudang, Kec. Serpong, Tangerang Selatan 15310',
+      'description': 'Ocean Park Water Adventure BSD City adalah taman rekreasi air tematik dengan wahana kolam ombak, seluncuran air menantang, kolam arus, dan area bermain anak.',
       'openHours': '11:00 - 16:00',
       'distance': '8.5 KM',
     },
@@ -63,8 +61,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
       'rating': 4.8,
       'image': 'lib/images/dufan.png',
       'address': 'Jl. Lodan Timur No.7, Ancol, Pademangan, Jakarta Utara',
-      'description':
-          'Taman hiburan outdoor terbesar dengan beragam wahana atraktif dan menantang adrenalin seperti Halilintar, Tornado, Kora-kora, dan Bianglala.',
+      'description': 'Taman hiburan outdoor terbesar dengan beragam wahana atraktif dan menantang adrenalin seperti Halilintar, Tornado, Kora-kora, dan Bianglala.',
       'openHours': '10:00 - 22:00',
       'distance': '1.68 KM',
     },
@@ -76,8 +73,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
       'rating': 4.8,
       'image': 'lib/images/tmii.png',
       'address': 'Jl. Raya Taman Mini, Cipayung, Jakarta Timur',
-      'description':
-          'Kawasan taman wisata bertema budaya Indonesia dengan anjungan daerah representatif seluruh nusantara, museum, dan kereta gantung.',
+      'description': 'Kawasan taman wisata bertema budaya Indonesia dengan anjungan daerah representatif seluruh nusantara, museum, dan kereta gantung.',
       'openHours': '06:00 - 20:00',
       'distance': '3.84 KM',
     },
@@ -86,11 +82,9 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
   @override
   void initState() {
     super.initState();
-    _originController = TextEditingController(
-      text: widget.initialOrigin ?? 'Klapanunggal, Bogor',
-    );
+    _originController = TextEditingController(text: widget.initialOrigin ?? '');
     _destinationController = TextEditingController(
-      text: widget.initialDestination ?? 'Moja Museum, Jakarta Pusat',
+      text: widget.initialDestination ?? '',
     );
   }
 
@@ -108,7 +102,9 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
     if (origin.isEmpty || destination.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Silakan masukkan lokasi asal dan tujuan terlebih dahulu'),
+          content: Text(
+            'Silakan masukkan lokasi asal dan tujuan terlebih dahulu',
+          ),
           backgroundColor: primaryGreen,
           duration: Duration(seconds: 2),
         ),
@@ -123,10 +119,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
     Navigator.pushNamed(
       context,
       '/pemilihan-transportasi',
-      arguments: {
-        'origin': origin,
-        'destination': destination,
-      },
+      arguments: {'origin': origin, 'destination': destination},
     );
   }
 
@@ -278,9 +271,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                       const SizedBox(height: 28),
 
                       // 6. SECTION REKOMENDASI TRANSPORTASI (UMUM VS PRIBADI)
-                      if (_isRouteSearched) ...[
-                        _buildTransportationSection(),
-                      ],
+                      if (_isRouteSearched) ...[_buildTransportationSection()],
                     ],
                   ),
                 ),
@@ -323,11 +314,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Row(
               children: [
-                const Icon(
-                  Icons.search,
-                  color: Colors.black87,
-                  size: 22,
-                ),
+                const Icon(Icons.search, color: Colors.black87, size: 22),
                 const SizedBox(width: 10),
                 Expanded(
                   child: TextField(
@@ -351,7 +338,11 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                 if (_originController.text.isNotEmpty)
                   GestureDetector(
                     onTap: () => setState(() => _originController.clear()),
-                    child: const Icon(Icons.close, size: 18, color: Colors.grey),
+                    child: const Icon(
+                      Icons.close,
+                      size: 18,
+                      color: Colors.grey,
+                    ),
                   ),
               ],
             ),
@@ -397,7 +388,11 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                 if (_destinationController.text.isNotEmpty)
                   GestureDetector(
                     onTap: () => setState(() => _destinationController.clear()),
-                    child: const Icon(Icons.close, size: 18, color: Colors.grey),
+                    child: const Icon(
+                      Icons.close,
+                      size: 18,
+                      color: Colors.grey,
+                    ),
                   ),
               ],
             ),
@@ -689,6 +684,20 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
               costText: 'Rp. 5.000',
               badgeText: 'Paling Ramah Lingkungan',
               badgeColor: const Color(0xFF10B981),
+              onTapRoute: () {
+                Navigator.pushNamed(
+                  context,
+                  '/krl',
+                  arguments: {
+                    'origin': _originController.text.isNotEmpty
+                        ? _originController.text
+                        : 'Lokasi Asal',
+                    'destination': _destinationController.text.isNotEmpty
+                        ? _destinationController.text
+                        : 'Lokasi Tujuan',
+                  },
+                );
+              },
             ),
             const SizedBox(height: 10),
 
@@ -704,6 +713,20 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
               costText: 'Rp. 3.500',
               badgeText: 'Tarif Paling Hemat',
               badgeColor: primaryGreen,
+              onTapRoute: () {
+                Navigator.pushNamed(
+                  context,
+                  '/transjakarta',
+                  arguments: {
+                    'origin': _originController.text.isNotEmpty
+                        ? _originController.text
+                        : 'Lokasi Asal',
+                    'destination': _destinationController.text.isNotEmpty
+                        ? _destinationController.text
+                        : 'Lokasi Tujuan',
+                  },
+                );
+              },
             ),
             const SizedBox(height: 10),
           ],
@@ -717,11 +740,26 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
               iconBgColor: const Color(0xFFD1FAE5),
               iconColor: const Color(0xFF059669),
               title: 'Motor / Ojek Online',
-              routeText: 'Via Jl. Raya Bogor & Jl. Gatot Subroto (Bebas Ganjil Genap)',
+              routeText:
+                  'Via Jl. Raya Bogor & Jl. Gatot Subroto (Bebas Ganjil Genap)',
               estimation: '28 Menit • 13.2 KM',
               costText: 'Rp. 18.000 - 24.000',
               badgeText: 'Waktu Tercepat',
               badgeColor: const Color(0xFF2563EB),
+              onTapRoute: () {
+                Navigator.pushNamed(
+                  context,
+                  '/ojek-online',
+                  arguments: {
+                    'origin': _originController.text.isNotEmpty
+                        ? _originController.text
+                        : 'Lokasi Asal',
+                    'destination': _destinationController.text.isNotEmpty
+                        ? _destinationController.text
+                        : 'Lokasi Tujuan',
+                  },
+                );
+              },
             ),
             const SizedBox(height: 10),
 
@@ -784,6 +822,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
     required String costText,
     required String badgeText,
     required Color badgeColor,
+    VoidCallback? onTapRoute,
   }) {
     return Container(
       padding: const EdgeInsets.all(14),
@@ -868,7 +907,10 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                 Expanded(
                   child: Text(
                     routeText,
-                    style: const TextStyle(fontSize: 10.5, color: textSecondary),
+                    style: const TextStyle(
+                      fontSize: 10.5,
+                      color: textSecondary,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -897,15 +939,65 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/pemilihan-transportasi',
-                    arguments: {
-                      'origin': _originController.text,
-                      'destination': _destinationController.text,
-                      'transport': title,
-                    },
-                  );
+                  if (onTapRoute != null) {
+                    onTapRoute();
+                    return;
+                  }
+                  // Khusus Motor/Ojek Online → halaman detail ojek online
+                  if (title.toLowerCase().contains('ojek') ||
+                      title.toLowerCase().contains('motor')) {
+                    Navigator.pushNamed(
+                      context,
+                      '/ojek-online',
+                      arguments: {
+                        'origin': _originController.text.isNotEmpty
+                            ? _originController.text
+                            : 'Lokasi Asal',
+                        'destination': _destinationController.text.isNotEmpty
+                            ? _destinationController.text
+                            : 'Lokasi Tujuan',
+                      },
+                    );
+                  } else if (title.toLowerCase().contains('krl') ||
+                      title.toLowerCase().contains('commuter')) {
+                    Navigator.pushNamed(
+                      context,
+                      '/krl',
+                      arguments: {
+                        'origin': _originController.text.isNotEmpty
+                            ? _originController.text
+                            : 'Lokasi Asal',
+                        'destination': _destinationController.text.isNotEmpty
+                            ? _destinationController.text
+                            : 'Lokasi Tujuan',
+                      },
+                    );
+                  } else if (title.toLowerCase().contains('transjakarta') ||
+                      title.toLowerCase().contains('busway') ||
+                      title.toLowerCase().contains('bus')) {
+                    Navigator.pushNamed(
+                      context,
+                      '/transjakarta',
+                      arguments: {
+                        'origin': _originController.text.isNotEmpty
+                            ? _originController.text
+                            : 'Lokasi Asal',
+                        'destination': _destinationController.text.isNotEmpty
+                            ? _destinationController.text
+                            : 'Lokasi Tujuan',
+                      },
+                    );
+                  } else {
+                    Navigator.pushNamed(
+                      context,
+                      '/pemilihan-transportasi',
+                      arguments: {
+                        'origin': _originController.text,
+                        'destination': _destinationController.text,
+                        'transport': title,
+                      },
+                    );
+                  }
                 },
                 child: const Row(
                   children: [
@@ -918,7 +1010,11 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                       ),
                     ),
                     SizedBox(width: 2),
-                    Icon(Icons.arrow_forward_ios, size: 10, color: primaryGreen),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 10,
+                      color: primaryGreen,
+                    ),
                   ],
                 ),
               ),
@@ -1029,7 +1125,8 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
 
             // Tab 2 Elevated Floating Circle (REKOMENDASI dengan shield icon)
             Positioned(
-              left: MediaQuery.of(context).size.width * 0.25 +
+              left:
+                  MediaQuery.of(context).size.width * 0.25 +
                   (MediaQuery.of(context).size.width * 0.25 - 54) / 2,
               top: -14,
               child: Container(
@@ -1038,10 +1135,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: primaryGreen,
-                    width: 4,
-                  ),
+                  border: Border.all(color: primaryGreen, width: 4),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.25),
@@ -1065,4 +1159,3 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
     );
   }
 }
-

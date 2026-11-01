@@ -14,14 +14,14 @@ class PemilihanTransportasiPage extends StatefulWidget {
   });
 
   @override
-  State<PemilihanTransportasiPage> createState() => _PemilihanTransportasiPageState();
+  State<PemilihanTransportasiPage> createState() =>
+      _PemilihanTransportasiPageState();
 }
 
 class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
   // Warna tema identik dengan mockup Ecowalk (#1A6556)
   static const Color primaryGreen = Color(0xFF1A6556);
   static const Color textDark = Color(0xFF111827);
-  static const Color textSecondary = Color(0xFF4B5563);
 
   late String _origin;
   late String _destination;
@@ -112,18 +112,22 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     if (args != null) {
       if (args['origin'] != null && (args['origin'] as String).isNotEmpty) {
         _origin = args['origin'] as String;
       }
-      if (args['destination'] != null && (args['destination'] as String).isNotEmpty) {
+      if (args['destination'] != null &&
+          (args['destination'] as String).isNotEmpty) {
         _destination = args['destination'] as String;
       }
       if (args['transport'] != null) {
         final transportName = (args['transport'] as String).toLowerCase();
         for (int i = 0; i < _vehicleOptions.length; i++) {
-          if (_vehicleOptions[i]['title'].toString().toLowerCase().contains(transportName) ||
+          if (_vehicleOptions[i]['title'].toString().toLowerCase().contains(
+                transportName,
+              ) ||
               transportName.contains(_vehicleOptions[i]['id'].toString())) {
             _selectedVehicleIndex = i;
             break;
@@ -135,6 +139,37 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
 
   void _navigateToRekapPerjalanan() {
     final chosenVehicle = _vehicleOptions[_selectedVehicleIndex];
+
+    // Jika Ojek Online dipilih, navigasi ke halaman detail Ojek Online
+    if (chosenVehicle['id'] == 'ojek') {
+      Navigator.pushNamed(
+        context,
+        '/ojek-online',
+        arguments: {'origin': _origin, 'destination': _destination},
+      );
+      return;
+    }
+
+    if (chosenVehicle['id'] == 'umum') {
+      Navigator.pushNamed(
+        context,
+        '/krl',
+        arguments: {'origin': _origin, 'destination': _destination},
+      );
+      return;
+    }
+
+    if (chosenVehicle['id'] == 'bus' ||
+        chosenVehicle['title'].toString().toLowerCase().contains('transjakarta') ||
+        chosenVehicle['title'].toString().toLowerCase().contains('bus')) {
+      Navigator.pushNamed(
+        context,
+        '/transjakarta',
+        arguments: {'origin': _origin, 'destination': _destination},
+      );
+      return;
+    }
+
     Navigator.pushNamed(
       context,
       '/rekap-perjalanan',
@@ -341,10 +376,7 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
                 // Titik Awal
                 const Text(
                   'Titik Awal',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 9.5,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 9.5),
                 ),
                 const SizedBox(height: 1),
                 Text(
@@ -372,10 +404,7 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
                 // Titik Akhir
                 const Text(
                   'Titik Akhir',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 9.5,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 9.5),
                 ),
                 const SizedBox(height: 1),
                 Text(
@@ -424,7 +453,9 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
                 decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFFE8F3EF) : const Color(0xFFF3F4F6),
+                  color: isSelected
+                      ? const Color(0xFFE8F3EF)
+                      : const Color(0xFFF3F4F6),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: isSelected ? primaryGreen : const Color(0xFFE5E7EB),
@@ -445,7 +476,9 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
                         mode['label'] as String,
                         style: TextStyle(
                           fontSize: 10.5,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.w600,
                           color: isSelected ? primaryGreen : Colors.black87,
                         ),
                         maxLines: 1,
@@ -501,7 +534,10 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
               top: 10,
               left: 10,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.92),
                   borderRadius: BorderRadius.circular(20),
@@ -586,6 +622,32 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
 
           return GestureDetector(
             onTap: () {
+              // Jika sudah terpilih dan tap lagi → langsung navigasi ke detail
+              if (item['id'] == 'ojek') {
+                Navigator.pushNamed(
+                  context,
+                  '/ojek-online',
+                  arguments: {'origin': _origin, 'destination': _destination},
+                );
+                return;
+              }
+              if (item['id'] == 'umum') {
+                Navigator.pushNamed(
+                  context,
+                  '/krl',
+                  arguments: {'origin': _origin, 'destination': _destination},
+                );
+                return;
+              }
+              if (item['id'] == 'bus' ||
+                  item['title'].toString().toLowerCase().contains('transjakarta')) {
+                Navigator.pushNamed(
+                  context,
+                  '/transjakarta',
+                  arguments: {'origin': _origin, 'destination': _destination},
+                );
+                return;
+              }
               setState(() {
                 _selectedVehicleIndex = index;
               });
@@ -620,7 +682,10 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
                       fit: BoxFit.cover,
                       errorBuilder: (_, _, _) => Container(
                         color: Colors.grey.shade400,
-                        child: const Icon(Icons.directions_car, color: Colors.white),
+                        child: const Icon(
+                          Icons.directions_car,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
 
@@ -744,12 +809,30 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
     );
   }
 
-  Widget _buildTipRow(String question, String recommendation, int vehicleIndex) {
+  Widget _buildTipRow(
+    String question,
+    String recommendation,
+    int vehicleIndex,
+  ) {
     return InkWell(
       onTap: () {
         setState(() {
           _selectedVehicleIndex = vehicleIndex;
         });
+        // Jika Ojek Online, navigasi langsung ke detail
+        if (vehicleIndex == 0) {
+          Navigator.pushNamed(
+            context,
+            '/ojek-online',
+            arguments: {'origin': _origin, 'destination': _destination},
+          );
+        } else if (vehicleIndex == 1) {
+          Navigator.pushNamed(
+            context,
+            '/krl',
+            arguments: {'origin': _origin, 'destination': _destination},
+          );
+        }
       },
       borderRadius: BorderRadius.circular(8),
       child: Padding(
@@ -767,10 +850,7 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
                 ),
               ),
             ),
-            const Text(
-              '👉',
-              style: TextStyle(fontSize: 13),
-            ),
+            const Text('👉', style: TextStyle(fontSize: 13)),
             const SizedBox(width: 8),
             Expanded(
               flex: 10,
@@ -816,4 +896,3 @@ class _DottedLinePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-
