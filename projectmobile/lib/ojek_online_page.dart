@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:projectmobile/widgets/route_map_widget.dart';
 
 class OjekOnlinePage extends StatelessWidget {
   const OjekOnlinePage({super.key, this.origin, this.destination});
@@ -13,6 +14,13 @@ class OjekOnlinePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final displayOrigin =
+        args?['origin'] as String? ?? origin ?? 'Lokasi Awal';
+    final displayDestination =
+        args?['destination'] as String? ?? destination ?? 'Lokasi Tujuan';
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.white,
@@ -50,9 +58,57 @@ class OjekOnlinePage extends StatelessWidget {
                 const SizedBox(height: 13),
                 const _TripSummary(),
                 const SizedBox(height: 24),
-                _MapPreview(onPressed: () => _showMapMessage(context)),
+                _MapPreview(
+                  origin: displayOrigin,
+                  destination: displayDestination,
+                  onPressed: () => _openMap(context, displayOrigin, displayDestination),
+                ),
                 const SizedBox(height: 31),
                 const _TravelAnalysis(),
+                const SizedBox(height: 24),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _green,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/rekap-perjalanan',
+                          arguments: {
+                            'title': displayDestination,
+                            'origin': displayOrigin,
+                            'dateTime': 'Hari ini • Segera Dijemput',
+                            'address': displayDestination,
+                            'distance': '5.2 KM',
+                            'transport': 'Ojek Online',
+                            'transportImage':
+                                'lib/images/transport_ojek_online.jpg',
+                            'transportPrice': 'Rp. 30.000',
+                            'estimatedDuration': '20 Menit',
+                          },
+                        );
+                      },
+                      child: const Text(
+                        'Pesan Ojek Online • Rp. 30.000',
+                        style: TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -61,12 +117,18 @@ class OjekOnlinePage extends StatelessWidget {
     );
   }
 
-  void _showMapMessage(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Lokasi perjalanan siap dilihat di peta.'),
-        duration: Duration(milliseconds: 1400),
-      ),
+  void _openMap(BuildContext context, String origin, String destination) {
+    Navigator.pushNamed(
+      context,
+      '/peta-rute',
+      arguments: {
+        'origin': origin,
+        'destination': destination,
+        'mode': 'Motor / Ojek Online',
+        'duration': '20 Menit',
+        'distance': '5.2 KM',
+        'isLiveNavigation': true,
+      },
     );
   }
 }
@@ -175,39 +237,31 @@ class _InfoLine extends StatelessWidget {
 }
 
 class _MapPreview extends StatelessWidget {
-  const _MapPreview({required this.onPressed});
-
+  final String origin;
+  final String destination;
   final VoidCallback onPressed;
+
+  const _MapPreview({
+    required this.origin,
+    required this.destination,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onPressed,
-          child: SizedBox(
-            width: double.infinity,
-            height: 208,
-            child: Image.asset(
-              'lib/images/map_route.png',
-              fit: BoxFit.cover,
-              errorBuilder: (_, _, _) => const ColoredBox(
-                color: Color(0xFFE4F1E8),
-                child: Center(
-                  child: Icon(
-                    Icons.map_outlined,
-                    size: 56,
-                    color: OjekOnlinePage._green,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
+      child: RouteMapWidget(
+        origin: origin,
+        destination: destination,
+        mode: 'Ojek Online',
+        estimatedDuration: '20 Menit',
+        distance: '5.2 KM',
+        height: 208,
+        isInteractive: true,
+        showControls: true,
+        isLiveNavigation: true,
+        onExpand: onPressed,
       ),
     );
   }

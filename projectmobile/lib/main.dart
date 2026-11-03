@@ -18,6 +18,7 @@ import 'package:projectmobile/komparasi_page.dart';
 import 'package:projectmobile/login_page.dart';
 import 'package:projectmobile/new_password_page.dart';
 import 'package:projectmobile/notifikasi_page.dart';
+import 'package:projectmobile/peta_navigasi_page.dart';
 import 'package:projectmobile/privacy_policy_page.dart';
 import 'package:projectmobile/profile_page.dart';
 import 'package:projectmobile/rating_wisata_page.dart';
@@ -116,6 +117,12 @@ class MyApp extends StatelessWidget {
         '/transportasi-bus': (context) => const TransjakartaPage(),
         '/keberangkatan': (context) => const KeberangkatanPage(),
         '/jadwal-keberangkatan': (context) => const KeberangkatanPage(),
+        '/peta-rute': (context) => const PetaNavigasiPage(),
+        '/peta-navigasi': (context) => const PetaNavigasiPage(),
+        '/peta': (context) => const PetaNavigasiPage(),
+        '/map-navigation': (context) => const PetaNavigasiPage(),
+        '/navigasi-realtime': (context) => const PetaNavigasiPage(autoStartLive: true),
+        '/navigasi': (context) => const PetaNavigasiPage(autoStartLive: true),
         '/rekap-perjalanan': (context) => const RekapPerjalananPage(),
         '/rekap': (context) => const RekapPerjalananPage(),
         '/trip-summary': (context) => const RekapPerjalananPage(),

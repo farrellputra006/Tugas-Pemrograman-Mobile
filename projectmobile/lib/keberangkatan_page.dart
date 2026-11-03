@@ -77,6 +77,15 @@ class KeberangkatanPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final displayOrigin =
+        args?['origin'] as String? ?? origin ?? 'Halte Duri Kepa';
+    final displayDestination =
+        args?['destination'] as String? ?? destination ?? 'Kota Tua / Monas';
+    final displayShelter =
+        args?['shelter'] as String? ?? shelter ?? 'Halte Duri Kepa';
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: _green,
@@ -111,27 +120,80 @@ class KeberangkatanPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 32),
             child: Column(
               children: [
-                // 1. PETA RUTE KEBERANGKATAN
-                SizedBox(
-                  width: double.infinity,
-                  height: 220,
-                  child: Image.asset(
-                    'lib/images/map_keberangkatan.png',
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Image.asset(
-                      'lib/images/map_route.png',
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => Container(
-                        color: const Color(0xFFE5E7EB),
-                        child: const Center(
-                          child: Icon(
-                            Icons.map,
-                            size: 60,
-                            color: _green,
+                // 1. PETA RUTE KEBERANGKATAN DENGAN AKSES DETAIL NAVIGASI
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/peta-rute',
+                      arguments: {
+                        'origin': displayOrigin,
+                        'destination': displayDestination,
+                        'shelter': displayShelter,
+                        'mode': 'TransJakarta',
+                        'duration': '11 mnt',
+                        'distance': '10.5 KM',
+                        'isLiveNavigation': true,
+                      },
+                    );
+                  },
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: 220,
+                        child: Image.asset(
+                          'lib/images/map_keberangkatan.png',
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => Image.asset(
+                            'lib/images/map_route.png',
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => Container(
+                              color: const Color(0xFFE5E7EB),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.map,
+                                  size: 60,
+                                  color: _green,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.92),
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.15),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(Icons.fullscreen, size: 14, color: Color(0xFF1B6A5A)),
+                              SizedBox(width: 4),
+                              Text(
+                                'Buka Peta Penuh',
+                                style: TextStyle(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1B6A5A),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 

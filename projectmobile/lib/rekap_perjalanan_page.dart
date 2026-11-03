@@ -13,6 +13,7 @@ class RekapPerjalananPage extends StatefulWidget {
 class _RekapPerjalananPageState extends State<RekapPerjalananPage> {
   // Warna tema sesuai referensi aplikasi Ecowalk
   static const Color appColorPrimary = Color(0xFF4A8173);
+  static const Color primaryGreen = Color(0xFF1B6A5A);
   static const Color textDark = Color(0xFF111827);
   static const Color textMuted = Color(0xFF6B7280);
 
@@ -295,33 +296,78 @@ class _RekapPerjalananPageState extends State<RekapPerjalananPage> {
 
   // 2. Rute Perjalanan Map Card
   Widget _buildRouteMap() {
-    return Container(
-      width: double.infinity,
-      height: 135,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(14),
-        child: Image.asset(
-          'lib/images/rekap_map.png',
-          width: double.infinity,
-          height: 135,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Image.asset(
-              'lib/images/map_dufan.png',
-              fit: BoxFit.cover,
-            );
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          '/peta-rute',
+          arguments: {
+            'origin': _item['origin'] ?? 'Lokasi Asal',
+            'destination': _item['title'] ?? 'Destinasi',
+            'mode': _item['transport'] ?? 'Transportasi Terpilih',
+            'duration': _item['estimatedDuration'] ?? '20 Menit',
+            'distance': _item['distance'] ?? '5.2 KM',
+            'isLiveNavigation': true,
           },
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 135,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                'lib/images/rekap_map.png',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'lib/images/map_route.png',
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.9),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(Icons.fullscreen, size: 12, color: Color(0xFF1B6A5A)),
+                      SizedBox(width: 3),
+                      Text(
+                        'Lihat Peta',
+                        style: TextStyle(
+                          fontSize: 9.5,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1B6A5A),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

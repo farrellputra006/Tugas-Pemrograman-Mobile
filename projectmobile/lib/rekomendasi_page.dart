@@ -25,57 +25,89 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
   late TextEditingController _destinationController;
 
   bool _isRouteSearched = true;
-  String _selectedTransportFilter =
-      'Semua'; // 'Semua', 'Umum', 'Pribadi', 'Hemat'
+  String _selectedTransportFilter = 'Semua'; // 'Semua', 'Umum', 'Pribadi', 'Hemat'
 
-  final List<Map<String, dynamic>> _destinationRecommendations = [
+  // Data Rekomendasi Moda Transportasi Pilihan yang Bisa Langsung Dipilih
+  final List<Map<String, dynamic>> _transportRecommendations = [
     {
-      'id': 'moja',
-      'title': 'Moja Museum',
-      'location': 'Jakarta Pusat',
-      'price': 'Mulai dari Rp. 136.500',
-      'rating': 4.5,
-      'image': 'lib/images/moja_museum.png',
-      'address': 'Gelora Bung Karno, Main Stadium, Jl. Gerbang Pemuda No.1, Jakarta Pusat',
-      'description': 'Moja Museum adalah ruang seni interaktif kekinian dengan instalasi visual estetik, roller skating (RoJA by MoJA), dan spot foto menarik untuk anak muda dan keluarga.',
-      'openHours': '11:00 - 19:30',
-      'distance': '3.2 KM',
+      'id': 'krl',
+      'title': 'KRL Commuter Line',
+      'badge': 'Termurah',
+      'badgeColor': Color(0xFF10B981),
+      'fare': 'Rp. 3.000 - 5.000',
+      'duration': '35 Menit',
+      'tag': '🌱 Ramah Lingkungan',
+      'image': 'lib/images/transport_krl_hero.jpg',
+      'route': '/krl',
     },
     {
-      'id': 'oceanpark',
-      'title': 'Ocean Park BSD City Serpong',
-      'location': 'Tangerang',
-      'price': 'Mulai dari Rp. 65.000',
-      'rating': 4.5,
-      'image': 'lib/images/ocean_park.png',
-      'address': 'CBD Area, Jl. Pahlawan Seribu, Lengkong Gudang, Kec. Serpong, Tangerang Selatan 15310',
-      'description': 'Ocean Park Water Adventure BSD City adalah taman rekreasi air tematik dengan wahana kolam ombak, seluncuran air menantang, kolam arus, dan area bermain anak.',
-      'openHours': '11:00 - 16:00',
-      'distance': '8.5 KM',
+      'id': 'transjakarta',
+      'title': 'TransJakarta (Busway)',
+      'badge': 'Tarif Flat',
+      'badgeColor': primaryGreen,
+      'fare': 'Rp. 3.500 Flat',
+      'duration': '40 Menit',
+      'tag': '🚌 Jalur Khusus Bus',
+      'image': 'lib/images/transport_transjakarta_hero.jpg',
+      'route': '/transjakarta',
     },
+    {
+      'id': 'ojek',
+      'title': 'Ojek Online',
+      'badge': 'Tercepat',
+      'badgeColor': Color(0xFF2563EB),
+      'fare': 'Rp. 18.000 - 30.000',
+      'duration': '20 Menit',
+      'tag': '⚡ Bebas Macet',
+      'image': 'lib/images/transport_ojek_online.jpg',
+      'route': '/ojek-online',
+    },
+    {
+      'id': 'taxi',
+      'title': 'Taksi / Mobil Online',
+      'badge': 'Paling Nyaman',
+      'badgeColor': Color(0xFF8B5CF6),
+      'fare': 'Rp. 35.000 - 60.000',
+      'duration': '30 Menit',
+      'tag': '✨ AC & Nyaman',
+      'image': 'lib/images/transport_taxi.png',
+      'route': '/pemilihan-transportasi',
+    },
+  ];
+
+  // Pilihan Destinasi Populer (Hanya untuk rute & transportasi, TANPA pemesanan tiket)
+  final List<Map<String, dynamic>> _popularDestinations = [
     {
       'id': 'dufan',
       'title': 'Dunia Fantasi (DUFAN)',
       'location': 'Ancol, Jakarta Utara',
-      'price': 'Mulai dari Rp. 200.000',
-      'rating': 4.8,
-      'image': 'lib/images/dufan.png',
-      'address': 'Jl. Lodan Timur No.7, Ancol, Pademangan, Jakarta Utara',
-      'description': 'Taman hiburan outdoor terbesar dengan beragam wahana atraktif dan menantang adrenalin seperti Halilintar, Tornado, Kora-kora, dan Bianglala.',
-      'openHours': '10:00 - 22:00',
       'distance': '1.68 KM',
+      'image': 'lib/images/dufan.png',
+      'transportHint': 'KRL • TransJakarta • Ojek',
+    },
+    {
+      'id': 'moja',
+      'title': 'Moja Museum',
+      'location': 'Gelora Bung Karno, Senayan',
+      'distance': '3.2 KM',
+      'image': 'lib/images/moja_museum.png',
+      'transportHint': 'MRT • TransJakarta • Ojek',
+    },
+    {
+      'id': 'oceanpark',
+      'title': 'Ocean Park BSD City',
+      'location': 'Serpong, Tangerang',
+      'distance': '8.5 KM',
+      'image': 'lib/images/ocean_park.png',
+      'transportHint': 'KRL Commuter • Taksi',
     },
     {
       'id': 'tmii',
       'title': 'Taman Mini Indonesia Indah',
-      'location': 'Jakarta Timur',
-      'price': 'Mulai dari Rp. 25.000',
-      'rating': 4.8,
-      'image': 'lib/images/tmii.png',
-      'address': 'Jl. Raya Taman Mini, Cipayung, Jakarta Timur',
-      'description': 'Kawasan taman wisata bertema budaya Indonesia dengan anjungan daerah representatif seluruh nusantara, museum, dan kereta gantung.',
-      'openHours': '06:00 - 20:00',
+      'location': 'Cipayung, Jakarta Timur',
       'distance': '3.84 KM',
+      'image': 'lib/images/tmii.png',
+      'transportHint': 'LRT • TransJakarta • Ojek',
     },
   ];
 
@@ -123,30 +155,43 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
     );
   }
 
-  void _selectDestinationFromCard(Map<String, dynamic> item) {
-    setState(() {
-      _destinationController.text = '${item['title']}, ${item['location']}';
-      _isRouteSearched = true;
-    });
-  }
+  // Navigasi langsung ke moda transportasi terpilih
+  void _navigateToTransportPage(String routeName) {
+    final origin = _originController.text.isNotEmpty
+        ? _originController.text
+        : 'Lokasi Asal';
+    final destination = _destinationController.text.isNotEmpty
+        ? _destinationController.text
+        : 'Lokasi Tujuan';
 
-  void _openDetailWisata(Map<String, dynamic> item) {
     Navigator.pushNamed(
       context,
-      '/detail-wisata',
+      routeName,
       arguments: {
-        'id': item['id'],
-        'title': item['title'],
-        'rating': '${item['rating']}',
-        'reviewsCount': '12.450 Ulasan',
-        'openHours': item['openHours'] ?? '10:00 - 20:00',
-        'isOpen': true,
-        'address': item['address'] ?? item['location'],
-        'description': item['description'] ?? '',
-        'priceRange': item['price'],
-        'distance': item['distance'] ?? '3.5 KM',
-        'heroImage': item['image'],
-        'mapImage': 'lib/images/map_dufan.png',
+        'origin': origin,
+        'destination': destination,
+      },
+    );
+  }
+
+  // Memilih destinasi lalu langsung membuka opsi transportasi menuju ke sana
+  void _selectDestinationForTransport(Map<String, dynamic> item) {
+    final destinationName = '${item['title']}, ${item['location']}';
+    setState(() {
+      _destinationController.text = destinationName;
+      _isRouteSearched = true;
+    });
+
+    final origin = _originController.text.isNotEmpty
+        ? _originController.text
+        : 'Lokasi Anda Saat Ini';
+
+    Navigator.pushNamed(
+      context,
+      '/pemilihan-transportasi',
+      arguments: {
+        'origin': origin,
+        'destination': destinationName,
       },
     );
   }
@@ -197,7 +242,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                         ),
                       ),
 
-                      const SizedBox(height: 26),
+                      const SizedBox(height: 24),
 
                       // 2. JUDUL HALAMAN
                       const Padding(
@@ -250,34 +295,90 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
 
                       const SizedBox(height: 24),
 
-                      // 5. SECTION REKOMENDASI TUJUAN
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Text(
-                          'Rekomendasi Tujuan',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                      // 5. REKOMENDASI TRANSPORTASI (Pilihan Moda yang Bisa Langsung Dipilih)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Rekomendasi Transportasi',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: textDark,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE8F3EF),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Text(
+                                '🌱 Eco-Friendly',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: primaryGreen,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
 
                       const SizedBox(height: 12),
 
-                      // List Horizontal Kartu Rekomendasi
+                      // Kartu Horizontal Rekomendasi Transportasi (KRL, TransJakarta, Ojek, Taksi)
+                      _buildTransportHorizontalList(),
+
+                      const SizedBox(height: 26),
+
+                      // 6. PILIHAN DESTINASI TUJUAN (Tanpa pesan tiket, langsung pilih transportasi)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Pilihan Destinasi Tujuan',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: textDark,
+                              ),
+                            ),
+                            Text(
+                              'Pilih untuk cari rute',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: textSecondary,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // List Destinasi Populer untuk Rute Transportasi
                       _buildDestinationHorizontalList(),
 
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 26),
 
-                      // 6. SECTION REKOMENDASI TRANSPORTASI (UMUM VS PRIBADI)
+                      // 7. SECTION PILIHAN TRANSPORTASI TERINCI
                       if (_isRouteSearched) ...[_buildTransportationSection()],
                     ],
                   ),
                 ),
               ),
 
-              // 7. BOTTOM NAVIGATION BAR (Identik Mockup dengan elevated tab Rekomendasi)
+              // 8. BOTTOM NAVIGATION BAR (Identik Mockup dengan elevated tab Rekomendasi)
               _buildBottomNavigationBar(),
             ],
           ),
@@ -402,206 +503,351 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
     );
   }
 
-  // Horizontal Card List: Moja Museum & Ocean Park BSD City Serpong
-  Widget _buildDestinationHorizontalList() {
+  // 1. HORIZONTAL CARDS: REKOMENDASI TRANSPORTASI YANG BISA LANGSUNG DIPILIH
+  Widget _buildTransportHorizontalList() {
     return SizedBox(
-      height: 228,
+      height: 185,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: _destinationRecommendations.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 16),
+        itemCount: _transportRecommendations.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 14),
         itemBuilder: (context, index) {
-          final item = _destinationRecommendations[index];
-          return _buildDestinationCard(item);
+          final item = _transportRecommendations[index];
+          return GestureDetector(
+            onTap: () => _navigateToTransportPage(item['route'] as String),
+            child: Container(
+              width: 170,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    // Gambar Transportasi
+                    Image.asset(
+                      item['image'] as String,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey.shade300,
+                        child: const Icon(Icons.directions_bus, size: 40, color: Color(0xFF1B5E50)),
+                      ),
+                    ),
+
+                    // Gradient Bawah
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      height: 130,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              Colors.black.withValues(alpha: 0.95),
+                              Colors.black.withValues(alpha: 0.65),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // Badge di Pojok Kanan Atas
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: (item['badgeColor'] as Color).withValues(alpha: 0.92),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.2),
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          item['badge'] as String,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // Informasi Transportasi
+                    Positioned(
+                      left: 10,
+                      right: 10,
+                      bottom: 10,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            item['title'] as String,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            item['fare'] as String,
+                            style: const TextStyle(
+                              color: Color(0xFF6EE7B7),
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                item['duration'] as String,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 10,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: primaryGreen,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Row(
+                                  children: [
+                                    Text(
+                                      'Pilih',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 9.5,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(width: 2),
+                                    Icon(
+                                      Icons.arrow_forward,
+                                      color: Colors.white,
+                                      size: 10,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
   }
 
-  Widget _buildDestinationCard(Map<String, dynamic> item) {
-    return GestureDetector(
-      onTap: () => _openDetailWisata(item),
-      child: Container(
-        width: 154,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // Gambar Destinasi
-              Image.asset(
-                item['image'] as String,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  color: Colors.grey.shade300,
-                  child: const Icon(Icons.image, color: Colors.grey, size: 40),
-                ),
-              ),
-
-              // Gradient Overlay Bawah untuk keterbacaan teks
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                height: 120,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Colors.black.withValues(alpha: 0.92),
-                        Colors.black.withValues(alpha: 0.65),
-                        Colors.transparent,
-                      ],
-                    ),
+  // 2. HORIZONTAL LIST: PILIHAN DESTINASI TUJUAN (Langsung untuk rute, tanpa tiket)
+  Widget _buildDestinationHorizontalList() {
+    return SizedBox(
+      height: 180,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: _popularDestinations.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 14),
+        itemBuilder: (context, index) {
+          final item = _popularDestinations[index];
+          return GestureDetector(
+            onTap: () => _selectDestinationForTransport(item),
+            child: Container(
+              width: 154,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
-                ),
+                ],
               ),
-
-              // Informasi Kartu
-              Positioned(
-                left: 10,
-                right: 10,
-                bottom: 8,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    // Judul Destinasi
-                    Text(
-                      item['title'] as String,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.bold,
-                        height: 1.2,
+                    // Gambar Destinasi
+                    Image.asset(
+                      item['image'] as String,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey.shade300,
+                        child: const Icon(Icons.place, color: Colors.grey, size: 40),
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
 
-                    const SizedBox(height: 3),
-
-                    // Lokasi (Pin merah)
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.location_on,
-                          color: Color(0xFFEF4444),
-                          size: 11,
+                    // Gradient Overlay Bawah
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      height: 120,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              Colors.black.withValues(alpha: 0.92),
+                              Colors.black.withValues(alpha: 0.65),
+                              Colors.transparent,
+                            ],
+                          ),
                         ),
-                        const SizedBox(width: 3),
-                        Expanded(
-                          child: Text(
-                            item['location'] as String,
+                      ),
+                    ),
+
+                    // Badge Jarak di Pojok Kanan Atas
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.6),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          item['distance'] as String,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 9.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // Informasi Destinasi & Tombol Cari Transportasi
+                    Positioned(
+                      left: 10,
+                      right: 10,
+                      bottom: 8,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            item['title'] as String,
                             style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 9.5,
+                              color: Colors.white,
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.bold,
+                              height: 1.2,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 3),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                color: Color(0xFFEF4444),
+                                size: 11,
+                              ),
+                              const SizedBox(width: 3),
+                              Expanded(
+                                child: Text(
+                                  item['location'] as String,
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 9.5,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          // Hint Moda Transportasi
+                          Text(
+                            item['transportHint'] as String,
+                            style: const TextStyle(
+                              color: Color(0xFF6EE7B7),
+                              fontSize: 9,
+                              fontWeight: FontWeight.w600,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 2),
-
-                    // Harga Mulai
-                    Text(
-                      item['price'] as String,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 9.5,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
-                    const SizedBox(height: 4),
-
-                    // Rating Bintang & Link Lebih Lanjut
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // Bintang Kuning
-                        Row(
-                          children: [
-                            for (int i = 0; i < 4; i++)
-                              const Icon(
-                                Icons.star,
-                                color: Color(0xFFFBBF24),
-                                size: 11,
-                              ),
-                            const Icon(
-                              Icons.star_half,
-                              color: Color(0xFFFBBF24),
-                              size: 11,
+                          const SizedBox(height: 4),
+                          // Aksi: Pilih Transportasi Ke Sini
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            decoration: BoxDecoration(
+                              color: primaryGreen,
+                              borderRadius: BorderRadius.circular(6),
                             ),
-                          ],
-                        ),
-
-                        // Tombol "Lebih Lanjut >"
-                        GestureDetector(
-                          onTap: () => _openDetailWisata(item),
-                          child: const Text(
-                            'Lebih Lanjut ›',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 9,
-                              fontWeight: FontWeight.w600,
+                            child: const Center(
+                              child: Text(
+                                'Pilih Transportasi ➔',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-
-              // Tombol Pin Cepat untuk pasang ke rute tujuan
-              Positioned(
-                top: 8,
-                right: 8,
-                child: GestureDetector(
-                  onTap: () => _selectDestinationFromCard(item),
-                  child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.5),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.navigation,
-                      color: Colors.white,
-                      size: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  // Section Rekomendasi Pilihan Transportasi Umum dan Pribadi
+  // 3. SECTION DAFTAR TRANSPORTASI TERINCI (DENGAN FILTER)
   Widget _buildTransportationSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -615,7 +861,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Pilihan Transportasi',
+                    'Daftar Rute & Tarif Transportasi',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -628,21 +874,6 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                     style: TextStyle(fontSize: 11.5, color: textSecondary),
                   ),
                 ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE8F3EF),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  '🌱 Eco-Friendly',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                    color: primaryGreen,
-                  ),
-                ),
               ),
             ],
           ),
@@ -668,11 +899,11 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
 
           const SizedBox(height: 14),
 
-          // Daftar Pilihan Transportasi
+          // Daftar Pilihan Transportasi Terinci
           if (_selectedTransportFilter == 'Semua' ||
               _selectedTransportFilter == 'Transportasi Umum' ||
               _selectedTransportFilter == 'Paling Hemat') ...[
-            // 1. KRL Commuter Line / MRT
+            // 1. KRL Commuter Line
             _buildTransportOptionCard(
               type: 'Transportasi Umum',
               icon: Icons.train_outlined,
@@ -685,18 +916,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
               badgeText: 'Paling Ramah Lingkungan',
               badgeColor: const Color(0xFF10B981),
               onTapRoute: () {
-                Navigator.pushNamed(
-                  context,
-                  '/krl',
-                  arguments: {
-                    'origin': _originController.text.isNotEmpty
-                        ? _originController.text
-                        : 'Lokasi Asal',
-                    'destination': _destinationController.text.isNotEmpty
-                        ? _destinationController.text
-                        : 'Lokasi Tujuan',
-                  },
-                );
+                _navigateToTransportPage('/krl');
               },
             ),
             const SizedBox(height: 10),
@@ -714,18 +934,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
               badgeText: 'Tarif Paling Hemat',
               badgeColor: primaryGreen,
               onTapRoute: () {
-                Navigator.pushNamed(
-                  context,
-                  '/transjakarta',
-                  arguments: {
-                    'origin': _originController.text.isNotEmpty
-                        ? _originController.text
-                        : 'Lokasi Asal',
-                    'destination': _destinationController.text.isNotEmpty
-                        ? _destinationController.text
-                        : 'Lokasi Tujuan',
-                  },
-                );
+                _navigateToTransportPage('/transjakarta');
               },
             ),
             const SizedBox(height: 10),
@@ -747,18 +956,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
               badgeText: 'Waktu Tercepat',
               badgeColor: const Color(0xFF2563EB),
               onTapRoute: () {
-                Navigator.pushNamed(
-                  context,
-                  '/ojek-online',
-                  arguments: {
-                    'origin': _originController.text.isNotEmpty
-                        ? _originController.text
-                        : 'Lokasi Asal',
-                    'destination': _destinationController.text.isNotEmpty
-                        ? _destinationController.text
-                        : 'Lokasi Tujuan',
-                  },
-                );
+                _navigateToTransportPage('/ojek-online');
               },
             ),
             const SizedBox(height: 10),
@@ -775,6 +973,9 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
               costText: 'Rp. 35.000 (Tol + BBM)',
               badgeText: 'Paling Nyaman',
               badgeColor: const Color(0xFF8B5CF6),
+              onTapRoute: () {
+                _navigateToTransportPage('/pemilihan-transportasi');
+              },
             ),
           ],
         ],
@@ -902,7 +1103,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.alt_route, size: 14, color: textSecondary),
+                const Icon(Icons.alt_route, size: 14, color: Color(0xFF4B5563)),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
@@ -943,60 +1144,18 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                     onTapRoute();
                     return;
                   }
-                  // Khusus Motor/Ojek Online → halaman detail ojek online
                   if (title.toLowerCase().contains('ojek') ||
                       title.toLowerCase().contains('motor')) {
-                    Navigator.pushNamed(
-                      context,
-                      '/ojek-online',
-                      arguments: {
-                        'origin': _originController.text.isNotEmpty
-                            ? _originController.text
-                            : 'Lokasi Asal',
-                        'destination': _destinationController.text.isNotEmpty
-                            ? _destinationController.text
-                            : 'Lokasi Tujuan',
-                      },
-                    );
+                    _navigateToTransportPage('/ojek-online');
                   } else if (title.toLowerCase().contains('krl') ||
                       title.toLowerCase().contains('commuter')) {
-                    Navigator.pushNamed(
-                      context,
-                      '/krl',
-                      arguments: {
-                        'origin': _originController.text.isNotEmpty
-                            ? _originController.text
-                            : 'Lokasi Asal',
-                        'destination': _destinationController.text.isNotEmpty
-                            ? _destinationController.text
-                            : 'Lokasi Tujuan',
-                      },
-                    );
+                    _navigateToTransportPage('/krl');
                   } else if (title.toLowerCase().contains('transjakarta') ||
                       title.toLowerCase().contains('busway') ||
                       title.toLowerCase().contains('bus')) {
-                    Navigator.pushNamed(
-                      context,
-                      '/transjakarta',
-                      arguments: {
-                        'origin': _originController.text.isNotEmpty
-                            ? _originController.text
-                            : 'Lokasi Asal',
-                        'destination': _destinationController.text.isNotEmpty
-                            ? _destinationController.text
-                            : 'Lokasi Tujuan',
-                      },
-                    );
+                    _navigateToTransportPage('/transjakarta');
                   } else {
-                    Navigator.pushNamed(
-                      context,
-                      '/pemilihan-transportasi',
-                      arguments: {
-                        'origin': _originController.text,
-                        'destination': _destinationController.text,
-                        'transport': title,
-                      },
-                    );
+                    _navigateToTransportPage('/pemilihan-transportasi');
                   }
                 },
                 child: const Row(
@@ -1025,7 +1184,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
     );
   }
 
-  // Bottom Navigation Bar yang persis sama dengan gambar referensi
+  // Bottom Navigation Bar yang persis sama dengan mockup
   Widget _buildBottomNavigationBar() {
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
 
@@ -1125,8 +1284,7 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
 
             // Tab 2 Elevated Floating Circle (REKOMENDASI dengan shield icon)
             Positioned(
-              left:
-                  MediaQuery.of(context).size.width * 0.25 +
+              left: MediaQuery.of(context).size.width * 0.25 +
                   (MediaQuery.of(context).size.width * 0.25 - 54) / 2,
               top: -14,
               child: Container(
@@ -1135,7 +1293,10 @@ class _RekomendasiPageState extends State<RekomendasiPage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
-                  border: Border.all(color: primaryGreen, width: 4),
+                  border: Border.all(
+                    color: primaryGreen,
+                    width: 4,
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.25),

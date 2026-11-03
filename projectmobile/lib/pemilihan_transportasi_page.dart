@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:projectmobile/widgets/route_map_widget.dart';
 
 class PemilihanTransportasiPage extends StatefulWidget {
   final String? initialOrigin;
@@ -495,113 +496,36 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
     );
   }
 
-  // 4. MAPS PETA RUTE
+  // 4. MAPS PETA RUTE DENGAN GARIS NAVIGASI OTENTIK LOKASI AWAL KE TUJUAN
   Widget _buildMapContainer() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          children: [
-            // Gambar Peta Monas/Gambir sesuai mockup
-            Image.asset(
-              'lib/images/map_route.png',
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (_, _, _) => Container(
-                height: 200,
-                color: const Color(0xFFE5E7EB),
-                child: const Center(
-                  child: Icon(Icons.map, size: 50, color: Colors.grey),
-                ),
-              ),
-            ),
+    final currentMode = _travelModes[_selectedModeIndex];
 
-            // Badge rute aktif di pojok kiri atas
-            Positioned(
-              top: 10,
-              left: 10,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.92),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 6,
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.near_me, size: 12, color: primaryGreen),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${_travelModes[_selectedModeIndex]['mode']} • ${_travelModes[_selectedModeIndex]['label']}',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: textDark,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // Tombol Perbesar / Navigasi di pojok kanan bawah
-            Positioned(
-              bottom: 10,
-              right: 10,
-              child: GestureDetector(
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Membuka mode peta navigasi rute...'),
-                      backgroundColor: primaryGreen,
-                      duration: Duration(milliseconds: 1000),
-                    ),
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(7),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.15),
-                        blurRadius: 6,
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.my_location,
-                    color: primaryGreen,
-                    size: 16,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: RouteMapWidget(
+        origin: _origin,
+        destination: _destination,
+        mode: currentMode['mode'] as String? ?? 'Motor',
+        estimatedDuration: currentMode['label'] as String? ?? '28 Menit',
+        distance: currentMode['distance'] as String? ?? '13.2 KM',
+        height: 220,
+        isInteractive: true,
+        showControls: true,
+        isLiveNavigation: true,
+        onExpand: () {
+          Navigator.pushNamed(
+            context,
+            '/peta-rute',
+            arguments: {
+              'origin': _origin,
+              'destination': _destination,
+              'mode': currentMode['mode'],
+              'duration': currentMode['label'],
+              'distance': currentMode['distance'],
+              'isLiveNavigation': true,
+            },
+          );
+        },
       ),
     );
   }
@@ -830,6 +754,12 @@ class _PemilihanTransportasiPageState extends State<PemilihanTransportasiPage> {
           Navigator.pushNamed(
             context,
             '/krl',
+            arguments: {'origin': _origin, 'destination': _destination},
+          );
+        } else if (vehicleIndex == 3) {
+          Navigator.pushNamed(
+            context,
+            '/transjakarta',
             arguments: {'origin': _origin, 'destination': _destination},
           );
         }

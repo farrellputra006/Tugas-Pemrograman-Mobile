@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:projectmobile/widgets/route_map_widget.dart';
 
 class KrlPage extends StatelessWidget {
   const KrlPage({super.key, this.origin, this.destination});
@@ -68,7 +69,24 @@ class KrlPage extends StatelessWidget {
                 const SizedBox(height: 18),
 
                 // 3. PETA / MAP
-                _KrlMap(onPressed: () => _showMapMessage(context)),
+                _KrlMap(
+                  origin: displayOrigin,
+                  destination: displayDestination,
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/peta-rute',
+                      arguments: {
+                        'origin': displayOrigin,
+                        'destination': displayDestination,
+                        'mode': 'KRL Commuter Line',
+                        'duration': '35 Menit',
+                        'distance': '14.5 KM',
+                        'isLiveNavigation': true,
+                      },
+                    );
+                  },
+                ),
 
                 const SizedBox(height: 20),
 
@@ -201,7 +219,7 @@ class KrlPage extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                const Icon(Icons.access_time, size: 16, color: _green),
+                const Icon(Icons.access_time, size: 16, color: Color(0xFF1B6A5A)),
                 const SizedBox(width: 8),
                 Text(
                   'Estimasi: $duration',
@@ -212,7 +230,7 @@ class KrlPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-                const Icon(Icons.payments_outlined, size: 16, color: _ink),
+                const Icon(Icons.payments_outlined, size: 16, color: Color(0xFF111827)),
                 const SizedBox(width: 8),
                 Text(
                   'Tarif: $fare',
@@ -233,7 +251,7 @@ class KrlPage extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.eco, color: _green, size: 20),
+                  const Icon(Icons.eco, color: Color(0xFF1B6A5A), size: 20),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -405,79 +423,33 @@ class _KrlInfoLine extends StatelessWidget {
   }
 }
 
-// 3. MAP CONTAINER
+// 3. MAP CONTAINER DENGAN RUTE LENGKAP & GARIS NAVIGASI OTENTIK
 class _KrlMap extends StatelessWidget {
-  const _KrlMap({required this.onPressed});
-
+  final String origin;
+  final String destination;
   final VoidCallback onPressed;
+
+  const _KrlMap({
+    required this.origin,
+    required this.destination,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onPressed,
-          child: Container(
-            width: double.infinity,
-            height: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: KrlPage._borderColor),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset(
-                  'lib/images/map_route.png',
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => const ColoredBox(
-                    color: Color(0xFFE4F1E8),
-                    child: Center(
-                      child: Icon(
-                        Icons.map_outlined,
-                        size: 56,
-                        color: KrlPage._green,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  right: 10,
-                  child: Container(
-                    padding: const EdgeInsets.all(7),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.15),
-                          blurRadius: 6,
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.my_location,
-                      color: KrlPage._green,
-                      size: 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      child: RouteMapWidget(
+        origin: origin,
+        destination: destination,
+        mode: 'KRL Commuter Line',
+        estimatedDuration: '35 Menit',
+        distance: '14.5 KM',
+        height: 200,
+        isInteractive: true,
+        showControls: true,
+        isLiveNavigation: true,
+        onExpand: onPressed,
       ),
     );
   }
